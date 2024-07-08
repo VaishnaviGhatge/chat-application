@@ -1,0 +1,26 @@
+{
+  "name": "final",
+  "version": "1.0.0",
+  "description": "",
+  "main": "client1.js",
+  "scripts": {
+    "test1": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VaishnaviGhatge/final.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VaishnaviGhatge/final/issues"
+  },
+  "homepage": "https://github.com/VaishnaviGhatge/final#readme",
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.6.0",
+    "sinon": "^18.0.0"
+  }
+}
