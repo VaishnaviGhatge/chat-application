@@ -12,7 +12,7 @@ let username;
 let targetUser;
 let userList = [];
 
-// Object to hold states for each user
+
 const userStates = {};
 
 const ClientState = {
@@ -50,7 +50,7 @@ userSocket.on('data', (data) => {
 
 userSocket.on('close', () => {
     console.error('Disconnected from server.');
-    process.exit(1); // This line should be removed or adjusted
+    process.exit(1); 
 });
 
 
