@@ -26,5 +26,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Start server
+        run: node server1.js &
+        # Use & to run the server in the background
+
+      - name: Wait for server to start
+        run: sleep 5 # Adjust as needed to give the server time to start
+
       - name: Run tests
         run: npm test
