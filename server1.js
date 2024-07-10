@@ -193,3 +193,4 @@ process.on('unhandledRejection', (reason, promise) => {
 server.listen(port, () => {
     console.log('TCP server started on port ' + port);
 });
+module.exports = server;

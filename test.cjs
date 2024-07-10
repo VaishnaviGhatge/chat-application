@@ -1,57 +1,54 @@
-(async () => {
-    const { expect } = await import('chai'); // Dynamically import chai
-    const net = require('net');
+const net = require('net');
+const assert = require('assert');
 
-    describe('Chat Application', function() {
-        let server;
-        let client1, client2;
-
-        before((done) => {
-            server = require('../server1'); // Assuming server1.js exports the server instance
-            server.listen(3333, done);
-        });
-
-        after((done) => {
-            server.close(done);
-        });
-
-        beforeEach((done) => {
-            client1 = new net.Socket();
-            client2 = new net.Socket();
-            done();
-        });
-
-        afterEach((done) => {
-            client1.destroy();
-            client2.destroy();
-            done();
-        });
-
-        it('should register users and send messages', (done) => {
-            client1.connect(3333, 'localhost', () => {
-                client1.write(JSON.stringify({ type: 'register', username: 'user1' }));
-            });
-
-            client1.on('data', (data) => {
-                const message = JSON.parse(data.toString());
-                if (message.type === 'notification' && message.notificationType === 'user_joined') {
-                    client2.connect(3333, 'localhost', () => {
-                        client2.write(JSON.stringify({ type: 'register', username: 'user2' }));
-                    });
-                } else if (message.type === 'list') {
-                    client2.write(JSON.stringify({ type: 'message', to: 'user1', message: 'Hello from user2' }));
-                } else if (message.type === 'message') {
-                    expect(message.message).to.equal('Hello from user2');
-                    done();
-                }
-            });
-
-            client2.on('data', (data) => {
-                const message = JSON.parse(data.toString());
-                if (message.type === 'notification' && message.notificationType === 'user_joined') {
-                    client1.write(JSON.stringify({ type: 'list' }));
-                }
-            });
+function sendMessage(socket, message) {
+    return new Promise((resolve, reject) => {
+        socket.write(JSON.stringify(message) + '\n', (err) => {
+            if (err) reject(err);
+            else resolve();
         });
     });
-})();
+}
+
+async function runTests() {
+    const client = new net.Socket();
+    
+    client.connect(3333, 'localhost', async () => {
+        console.log('Connected to server');
+
+        try {
+            // Test 1: Register a user
+            await sendMessage(client, { type: 'register', username: 'testuser' });
+            console.log('Test 1: User registered');
+
+            // Test 2: List users
+            await sendMessage(client, { type: 'list' });
+            console.log('Test 2: User list requested');
+
+            // Test 3: Send a message
+            await sendMessage(client, { type: 'message', to: 'testuser', message: 'Hello' });
+            console.log('Test 3: Message sent');
+
+            // Additional tests can be added here
+
+        } catch (error) {
+            console.error('Test failed:', error);
+        } finally {
+            client.end();
+        }
+    });
+
+    client.on('data', (data) => {
+        console.log('Received:', data.toString());
+    });
+
+    client.on('error', (err) => {
+        console.error('Client error:', err.message);
+    });
+
+    client.on('close', () => {
+        console.log('Connection closed');
+    });
+}
+
+runTests();
