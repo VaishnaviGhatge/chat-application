@@ -4,8 +4,8 @@
   "description": "",
   "main": "client1.js",
   "scripts": {
-    "test": "mocha --require @babel/register --extensions .cjs"
-  },
+  "test": "echo \"Error: no test specified\" && exit 1"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/VaishnaviGhatge/final.git"
@@ -22,7 +22,6 @@
     "@babel/preset-env": "^7.24.7",
     "@babel/register": "^7.24.6",
     "chai": "^5.1.1",
-    "mocha": "^10.6.0",
     "sinon": "^18.0.0"
   }
 }
